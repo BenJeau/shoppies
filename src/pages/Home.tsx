@@ -1,16 +1,20 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Page, Layout, TextContainer, Link, Frame } from "@shopify/polaris";
 import { LinkMinor } from "@shopify/polaris-icons";
+import queryString from "query-string";
 
 import { NominationsCard, ResultsCard, SearchCard } from "../components";
 import { Movie, Nomination } from "../@types";
-import { useMovieSearch } from "../hooks";
+import { useMovies, useMovieSearch } from "../hooks";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [nominations, setNominations] = useState<Nomination[]>([]);
+  const [movieIds, setMovieIds] = useState<string[]>([]);
 
   const { moviesSearch, loading, size, setSize } = useMovieSearch(searchValue);
+
+  const { movies, loading: loadingNominations } = useMovies(movieIds);
 
   const loadMore = () => {
     setSize(size + 1);
@@ -36,6 +40,35 @@ const Home = () => {
 
   const removeNomination = (id: string) =>
     setNominations((prev) => prev.filter((nomination) => id !== nomination.id));
+
+  useEffect(() => {
+    if (window.location.search) {
+      const query = queryString.parse(window.location.search);
+      window.history.replaceState(null, "", window.location.pathname);
+
+      if (
+        query.nominations &&
+        typeof query.nominations === "object" &&
+        query.nominations.length > 0
+      ) {
+        setMovieIds(query.nominations);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (movies) {
+      setNominations(
+        movies.map((i) => ({
+          id: i.imdbID,
+          name: i.Title,
+          year: i.Year,
+        }))
+      );
+
+      setMovieIds([]);
+    }
+  }, [movies, setNominations]);
 
   return (
     <Frame>
@@ -74,7 +107,7 @@ const Home = () => {
                 nominations={nominations}
                 clearNominations={clearNominations}
                 removeNomination={removeNomination}
-                loading={false}
+                loading={movieIds.length > 0 && loadingNominations}
               />
             </Layout.Section>
             <Layout.Section>
