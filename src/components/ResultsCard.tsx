@@ -55,7 +55,7 @@ const ResultsCard: React.FC<ResultsCardProps> = ({
         ) : movies.length === 0 ? (
           emptyResultsMarkup
         ) : (
-          <Scrollable style={{ maxHeight: 500, overflowX: "hidden" }} shadow>
+          <Scrollable style={{ maxHeight: 400, overflowX: "hidden" }} shadow>
             <List>
               {movies.map(({ imdbID, Year, Title }) => (
                 <MovieEntry
