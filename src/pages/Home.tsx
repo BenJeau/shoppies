@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Page, Layout, TextContainer, Link, Frame } from "@shopify/polaris";
 import { LinkMinor } from "@shopify/polaris-icons";
 
-import { SearchCard } from "../components";
+import { ResultsCard, SearchCard } from "../components";
 
 const Home = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -27,6 +27,16 @@ const Home = () => {
               <SearchCard
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
+              />
+            </Layout.Section>
+            <Layout.Section>
+              <ResultsCard
+                searchValue={searchValue}
+                addNomination={() => {}}
+                loadMore={() => {}}
+                loading={false}
+                nominations={[]}
+                movies={[]}
               />
             </Layout.Section>
             <Layout.Section>
