@@ -5,11 +5,11 @@ import queryString from "query-string";
 
 import { NominationsCard, ResultsCard, SearchCard } from "../components";
 import { Movie, Nomination } from "../@types";
-import { useMovies, useMovieSearch } from "../hooks";
+import { useMovies, useMovieSearch, useNominations } from "../hooks";
 
 const Home = () => {
+  const [nominations, setNominations] = useNominations<Nomination[]>([]);
   const [searchValue, setSearchValue] = useState("");
-  const [nominations, setNominations] = useState<Nomination[]>([]);
   const [movieIds, setMovieIds] = useState<string[]>([]);
 
   const { moviesSearch, loading, size, setSize } = useMovieSearch(searchValue);

@@ -1,4 +1,5 @@
 export { useMovieSearch } from "./useMovieSearch";
+export { useNominations } from "./useNominations";
 export { useMovies } from "./useMovies";
 
 export const fetcher = async (url: string) => {
