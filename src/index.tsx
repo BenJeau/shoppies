@@ -1,11 +1,14 @@
-import { StrictMode } from "react";
+import React from "react";
 import { render } from "react-dom";
 
-import App from "./App";
+import { Home } from "./pages";
+import { Provider } from "./utils";
+
+import "@shopify/polaris/dist/styles.css";
 
 render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <Provider>
+    <Home />
+  </Provider>,
   document.getElementById("root")
 );
