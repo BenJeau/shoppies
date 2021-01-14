@@ -1,8 +1,12 @@
+import { useState } from "react";
 import { Page, Layout, TextContainer, Link, Frame } from "@shopify/polaris";
-
 import { LinkMinor } from "@shopify/polaris-icons";
 
+import { SearchCard } from "../components";
+
 const Home = () => {
+  const [searchValue, setSearchValue] = useState("");
+
   return (
     <Frame>
       <div style={{ paddingTop: 30 }}>
@@ -19,6 +23,12 @@ const Home = () => {
           ]}
         >
           <Layout>
+            <Layout.Section>
+              <SearchCard
+                searchValue={searchValue}
+                setSearchValue={setSearchValue}
+              />
+            </Layout.Section>
             <Layout.Section>
               <TextContainer>
                 2021 - Made by{" "}
