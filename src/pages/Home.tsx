@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { Page, Layout, TextContainer, Link, Frame } from "@shopify/polaris";
+import {
+  Page,
+  Layout,
+  TextContainer,
+  Link,
+  Frame,
+  Banner,
+} from "@shopify/polaris";
 import { LinkMinor } from "@shopify/polaris-icons";
 import queryString from "query-string";
 
@@ -12,9 +19,15 @@ const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [movieIds, setMovieIds] = useState<string[]>([]);
 
-  const { moviesSearch, loading, size, setSize } = useMovieSearch(searchValue);
+  const { moviesSearch, loading, size, setSize, error } = useMovieSearch(
+    searchValue
+  );
 
-  const { movies, loading: loadingNominations } = useMovies(movieIds);
+  const {
+    movies,
+    loading: loadingNominations,
+    error: errorNominations,
+  } = useMovies(movieIds);
 
   const loadMore = () => {
     setSize(size + 1);
@@ -70,6 +83,20 @@ const Home = () => {
     }
   }, [movies, setNominations]);
 
+  const bannerMarkup = nominations.length > 4 && (
+    <Layout.Section>
+      <Banner status="warning">
+        You have reached the maximum number of nominations
+      </Banner>
+    </Layout.Section>
+  );
+
+  const apiErrorMarkup = (error || errorNominations) && (
+    <Layout.Section>
+      <Banner status="critical">Error communicating with the OMDB API</Banner>
+    </Layout.Section>
+  );
+
   return (
     <Frame>
       <div style={{ paddingTop: 30 }}>
@@ -86,6 +113,8 @@ const Home = () => {
           ]}
         >
           <Layout>
+            {apiErrorMarkup}
+            {bannerMarkup}
             <Layout.Section>
               <SearchCard
                 searchValue={searchValue}
