@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Page, Layout, TextContainer, Link, Frame } from "@shopify/polaris";
 import { LinkMinor } from "@shopify/polaris-icons";
 
-import { ResultsCard, SearchCard } from "../components";
+import { NominationsCard, ResultsCard, SearchCard } from "../components";
 import { Movie, Nomination } from "../@types";
 import { useMovieSearch } from "../hooks";
 
@@ -10,9 +10,7 @@ const Home = () => {
   const [searchValue, setSearchValue] = useState("");
   const [nominations, setNominations] = useState<Nomination[]>([]);
 
-  const { moviesSearch, loading, size, setSize } = useMovieSearch(
-    searchValue
-  );
+  const { moviesSearch, loading, size, setSize } = useMovieSearch(searchValue);
 
   const loadMore = () => {
     setSize(size + 1);
@@ -30,9 +28,14 @@ const Home = () => {
         : [],
     [moviesSearch]
   );
-  
+
+  const clearNominations = () => setNominations([]);
+
   const addNomination = (nomination: Nomination) =>
     setNominations((prev) => [...prev, nomination]);
+
+  const removeNomination = (id: string) =>
+    setNominations((prev) => prev.filter((nomination) => id !== nomination.id));
 
   return (
     <Frame>
@@ -64,6 +67,14 @@ const Home = () => {
                 loading={loading}
                 nominations={nominations}
                 movies={flatenedMoviesSearch}
+              />
+            </Layout.Section>
+            <Layout.Section>
+              <NominationsCard
+                nominations={nominations}
+                clearNominations={clearNominations}
+                removeNomination={removeNomination}
+                loading={false}
               />
             </Layout.Section>
             <Layout.Section>
